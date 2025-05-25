@@ -1,0 +1,71 @@
+# ChatGPT Tracker
+
+Une application Electron pour suivre et limiter le nombre de messages envoyés à ChatGPT sur une période glissante de 3 heures.
+
+## Fonctionnalités
+
+- **Interface moderne** avec mode sombre (Bulma + CSS custom)
+- **Saisie et enregistrement** de messages avec horodatage
+- **Affichage du nombre de messages** envoyés dans les 3 dernières heures (limite configurable, par défaut 80)
+- **Progression visuelle** avec barre de progression et alertes
+- **Minuteur** indiquant le temps écoulé depuis le premier message de la fenêtre glissante
+- **Copie rapide** du dernier message enregistré
+- **Persistance** des messages dans un fichier `messages.json`
+- **Suppression automatique** des messages vieux de plus de 3 heures
+
+## Installation
+
+1. **Cloner le dépôt**
+   ```sh
+   git clone https://github.com/Druindarora/chatgpt-tracker.git
+   cd chatgpt-tracker
+   ```
+
+2. **Installer les dépendances**
+   ```sh
+   npm install
+   ```
+
+3. **Lancer l’application**
+   ```sh
+   npm start
+   ```
+
+## Utilisation
+
+- Saisissez votre message dans la zone prévue puis cliquez sur **Enregistrer le message**.
+- Le compteur et la barre de progression se mettent à jour automatiquement.
+- Cliquez sur **Copier le dernier message** pour copier le contenu du dernier message enregistré dans le presse-papier.
+- Les messages sont automatiquement supprimés du tableau et du fichier JSON après 3 heures.
+
+## Personnalisation
+
+- **Limite de messages** : modifiez la valeur dans le code source si besoin.
+- **Durée de la fenêtre glissante** : modifiez la valeur `3 * 60 * 60 * 1000` dans le code pour ajuster la période.
+
+## Technologies utilisées
+
+- [Electron](https://www.electronjs.org/)
+- [Bulma](https://bulma.io/) (CSS)
+- JavaScript (ES6)
+- Node.js (pour la gestion des fichiers)
+
+## Structure du projet
+
+```
+src/
+  main.js         # Processus principal Electron
+  preload.js      # Bridge sécurisé entre Node et le renderer
+  renderer.js     # Logique de l’interface
+  main.html       # Interface utilisateur
+  main.css        # Styles personnalisés (mode sombre)
+  messages.json   # Stockage des messages
+```
+
+## Auteurs
+
+- hidjic
+
+---
+
+**Licence** : MIT
