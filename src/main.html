@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+    <title>Tracker de messages ChatGPT</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <!-- Title: <input id="title"/>
+    <button id="btn" type="button">Set</button> -->
+    <h1 class="main-title">Tracker de messages ChatGPT</h1>
+    <textarea id="messageInput" placeholder="Écris ton message ici..."></textarea>
+    <button id="logButton" class="button is-primary is-medium is-rounded">Enregistrer le message</button>
+    <button id="copyLastButton" class="button is-link is-medium is-rounded">Copier le dernier message</button>
+    <div id="counter">Messages dans les 3 dernières heures : 0 / 80</div>
+    <div id="progressBarContainer"><div id="progressBar"></div></div>
+    <div id="totalMessages" class="total-messages">Nombre de messages totaux enregistrés : 0</div>
+    <div id="timer">Minuteur : 00:00:00</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Heure</th>
+          <th>Temps restant</th>
+          <th>Message (40 premiers caractères)</th>
+        </tr>
+      </thead>
+      <tbody id="logTable"></tbody>
+    </table>
+    <script src="renderer.js"></script>
+  </body>
+</html>
