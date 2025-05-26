@@ -4,13 +4,13 @@ const path = require('path');
 
 function createWindow () {
   const filePath = path.join(__dirname, 'messages.json');
-  // Nettoyage des messages trop anciens (plus de 30 secondes)
+  // Nettoyage des messages trop anciens (plus de 3 heures)
   if (fs.existsSync(filePath)) {
     try {
       let messages = JSON.parse(fs.readFileSync(filePath, 'utf8'));
       const now = Date.now();
-      // Garde uniquement les messages de moins de 30 secondes
-      messages = messages.filter(msg => now - msg.timestamp <= 30 * 1000);
+      // Garde uniquement les messages de moins de 3 heures
+      messages = messages.filter(msg => now - msg.timestamp <= 3 * 60 * 60 * 1000);
       fs.writeFileSync(filePath, JSON.stringify(messages, null, 2), 'utf8');
     } catch (e) {
       // Si erreur, on laisse le fichier tel quel
