@@ -6,7 +6,7 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "hidjic",
+  "author": "Druindarora",
   "license": "MIT",
   "description": "Sert à tracker les messages ChatGPT.",
   "devDependencies": {

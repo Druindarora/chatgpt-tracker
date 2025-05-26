@@ -18,6 +18,7 @@ function createWindow () {
   }
 
   const mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, 'icone_app_tracker.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
