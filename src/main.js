@@ -1,8 +1,19 @@
-const { app, BrowserWindow, ipcMain } = require('electron/main')
+const { app, BrowserWindow, ipcMain, screen } = require('electron/main')
 const fs = require('fs');
 const path = require('path');
 
 function createWindow () {
+  const displays = screen.getAllDisplays();
+  // Prend l'écran 2 si dispo, sinon l'écran 1
+  const targetIndex = displays[1] ? 1 : 0;
+  const targetDisplay = displays[targetIndex];
+  const { workArea } = targetDisplay;
+  const halfWidth = Math.floor(workArea.width / 2);
+  const x = workArea.x + halfWidth; // Début de la moitié droite
+  const y = workArea.y;
+  const width = workArea.width - halfWidth; // Prend toute la moitié droite, même si largeur impaire
+  const height = workArea.height;
+
   const filePath = path.join(__dirname, 'messages.json');
   // Nettoyage des messages trop anciens (plus de 3 heures)
   if (fs.existsSync(filePath)) {
@@ -19,10 +30,14 @@ function createWindow () {
 
   const mainWindow = new BrowserWindow({
     icon: path.join(__dirname, 'icone_app_tracker.png'),
+    x,
+    y,
+    width,
+    height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
-  })
+  });
 
   ipcMain.on('set-title', (event, title) => {
     const webContents = event.sender
