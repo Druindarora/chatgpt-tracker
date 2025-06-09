@@ -14,19 +14,163 @@
     <button id="copyLastButton" class="button is-link is-medium is-rounded">Copier le dernier message</button>
     <div id="counter">Messages dans les 3 dernières heures : 0 / 80</div>
     <div id="progressBarContainer"><div id="progressBar"></div></div>
-    <div id="totalMessages" class="total-messages">Nombre de messages totaux enregistrés : 0</div>
     <div id="timer">Minuteur : 00:00:00</div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Heure</th>
-          <th>Temps restant</th>
-          <th>Message (40 premiers caractères)</th>
-        </tr>
-      </thead>
-      <tbody id="logTable"></tbody>
-    </table>
+    <!-- Ajout des onglets -->
+    <div class="tabs">
+      <ul>
+        <li class="is-active"><a data-tab="messages">Liste des messages</a></li>
+        <li><a data-tab="stats">Statistiques</a></li>
+      </ul>
+    </div>
+
+    <!-- Contenu des onglets -->
+    <div id="messages-tab" class="tab-content">
+      <table>
+        <thead>
+          <tr>
+            <th>Heure</th>
+            <th>Temps restant</th>
+            <th>Message (40 premiers caractères)</th>
+          </tr>
+        </thead>
+        <tbody id="logTable"></tbody>
+      </table>
+    </div>
+
+    <div id="stats-tab" class="tab-content" style="display: none;">
+      <div class="stats-content">
+        <!-- Partie État Actuel -->
+        <div class="box has-background-dark">
+          <h2 class="title is-4 has-text-white">État Actuel</h2>
+          
+          <!-- Totaux -->
+          <div class="box has-background-dark">
+            <h3 class="title is-5 has-text-white">Totaux</h3>
+            <div class="columns is-multiline">
+              <div class="column is-6">
+                <div class="notification is-primary">
+                  <p class="has-text-white">Messages totaux : <span id="total-messages">0</span></p>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="notification is-info">
+                  <p class="has-text-white">Nombre de tokens : <span id="total-tokens">0</span></p>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="notification is-danger">
+                  <p class="has-text-white">Moyenne de caractères par message : <span id="avg-chars">0</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages par jour -->
+          <div class="box has-background-dark">
+            <h3 class="title is-5 has-text-white">Messages par jour</h3>
+            <div class="columns is-multiline">
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Lundi : <span id="monday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Mardi : <span id="tuesday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Mercredi : <span id="wednesday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Jeudi : <span id="thursday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Vendredi : <span id="friday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Samedi : <span id="saturday-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-4">
+                <div class="notification is-light">
+                  <p>Dimanche : <span id="sunday-count">0</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages par période -->
+          <div class="box has-background-dark">
+            <h3 class="title is-5 has-text-white">Messages par période</h3>
+            <div class="columns is-multiline">
+              <div class="column is-6">
+                <div class="notification is-primary">
+                  <p class="has-text-white">Aujourd'hui : <span id="today-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="notification is-info">
+                  <p class="has-text-white">Cette semaine : <span id="week-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="notification is-warning">
+                  <p class="has-text-white">Ce mois-ci : <span id="month-count">0</span></p>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="notification is-danger">
+                  <p class="has-text-white">Cette année : <span id="year-count">0</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Partie Historique -->
+        <div class="box has-background-dark" style="margin-top: 30px;">
+          <h2 class="title is-4 has-text-white">Historique</h2>
+          
+          <!-- Sélection de la période (à améliorer plus tard avec des filtres dynamiques) -->
+          <div class="field">
+            <label class="label has-text-white">Période :</label>
+            <div class="control">
+              <div class="select">
+                <select id="history-period-select">
+                  <option value="daily">Quotidien</option>
+                  <option value="weekly">Hebdomadaire</option>
+                  <option value="monthly">Mensuel</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau d'historique -->
+          <div style="overflow-x:auto;">
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr id="history-table-header">
+                  <!-- Les entêtes seront générés dynamiquement selon la période -->
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Les lignes seront générées dynamiquement -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="renderer.js"></script>
   </body>
 </html>

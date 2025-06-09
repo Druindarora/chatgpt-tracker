@@ -132,3 +132,51 @@ td {
   height: 80px;
   object-fit: contain;
 }
+
+/* Styles pour les onglets */
+.tabs {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.tabs ul {
+  border-bottom-color: #444 !important;
+}
+
+.tabs a {
+  color: #b0b0b0 !important;
+  border-bottom-color: #444 !important;
+}
+
+.tabs a:hover {
+  color: #fafafa !important;
+  border-bottom-color: #666 !important;
+}
+
+.tabs li.is-active a {
+  color: #fafafa !important;
+  border-bottom-color: #4caf50 !important;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.stats-content {
+  padding: 20px;
+  background-color: #2c303a;
+  border-radius: 5px;
+  border: 1px solid #444;
+}
+
+.stats-content h2 {
+  margin-bottom: 20px;
+  color: #fafafa;
+}
+
+/* Amélioration de la lisibilité sur les notifications jaunes */
+.notification.is-warning,
+.notification.is-warning p,
+.notification.is-warning .has-text-white {
+  color: #23272f !important; /* texte noir foncé */
+}

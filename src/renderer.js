@@ -1,12 +1,10 @@
 const messages = [];
-    let totalMessagesCount = 0; // Nouveau compteur total
     const input = document.getElementById('messageInput');
     const logButton = document.getElementById('logButton');
     const counter = document.getElementById('counter');
     const timer = document.getElementById('timer');
     const logTable = document.getElementById('logTable');
     const progressBar = document.getElementById('progressBar');
-    const totalMessages = document.getElementById('totalMessages'); // Récupère le nouvel élément
     const copyLastButton = document.getElementById('copyLastButton');
 
     function updateTimerDisplay() {
@@ -117,18 +115,12 @@ const messages = [];
       input.disabled = count >= 80;
     }
 
-    function updateTotalMessages() {
-      totalMessages.textContent = `Nombre de messages totaux enregistrés pendant la session : ${totalMessagesCount}`;
-    }
-
     function logMessage(content) {
       const now = Date.now();
       const message = { content, timestamp: now };
       messages.push(message);
       addMessageToTable(message);
       updateCounter();
-      totalMessagesCount++;
-      updateTotalMessages();
 
       // Envoie le message à sauvegarder au main process via preload
       window.electronAPI.saveMessage(message);
@@ -159,8 +151,6 @@ const messages = [];
 
     updateCounter();
     updateTimerDisplay();
-    // Initialisation de l'affichage du compteur total au chargement
-    updateTotalMessages();
 
     window.electronAPI.onLoadMessages((messagesFromMain) => {
       messagesFromMain.forEach(msg => {
@@ -168,7 +158,6 @@ const messages = [];
         addMessageToTable(msg);
       });
       updateCounter();
-      updateTotalMessages();
     });
 
     copyLastButton.addEventListener('click', () => {
@@ -188,3 +177,172 @@ const messages = [];
       copyLastButton.disabled = messages.length === 0;
     }
     setInterval(updateCopyButtonState, 500);
+
+    // Gestion des onglets
+    document.querySelectorAll('.tabs a').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Désactive tous les onglets
+        document.querySelectorAll('.tabs li').forEach(li => li.classList.remove('is-active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+        
+        // Active l'onglet cliqué
+        const tabId = e.target.getAttribute('data-tab');
+        e.target.parentElement.classList.add('is-active');
+        document.getElementById(`${tabId}-tab`).style.display = 'block';
+      });
+    });
+
+    // Fonction pour mettre à jour l'affichage des stats
+    function updateStatsDisplay(stats) {
+      // Totaux
+      document.getElementById('total-messages').textContent = stats.totals.messages;
+      document.getElementById('total-tokens').textContent = stats.totals.tokens;
+      document.getElementById('avg-chars').textContent = Math.round(stats.totals.avgCharactersPerMessage);
+      
+      // Par jour
+      document.getElementById('monday-count').textContent = stats.byDay.monday;
+      document.getElementById('tuesday-count').textContent = stats.byDay.tuesday;
+      document.getElementById('wednesday-count').textContent = stats.byDay.wednesday;
+      document.getElementById('thursday-count').textContent = stats.byDay.thursday;
+      document.getElementById('friday-count').textContent = stats.byDay.friday;
+      document.getElementById('saturday-count').textContent = stats.byDay.saturday;
+      document.getElementById('sunday-count').textContent = stats.byDay.sunday;
+      
+      // Par période
+      document.getElementById('today-count').textContent = stats.byPeriod.today;
+      document.getElementById('week-count').textContent = stats.byPeriod.week;
+      document.getElementById('month-count').textContent = stats.byPeriod.month;
+      document.getElementById('year-count').textContent = stats.byPeriod.year;
+      
+      // Moyennes
+      document.getElementById('avg-day').textContent = Math.round(stats.averages.perDay);
+      document.getElementById('avg-week').textContent = Math.round(stats.averages.perWeek);
+      document.getElementById('avg-month').textContent = Math.round(stats.averages.perMonth);
+      document.getElementById('avg-year').textContent = Math.round(stats.averages.perYear);
+    }
+
+    // Ajouter les écouteurs d'événements pour les stats
+    window.electronAPI.onStatsUpdated((stats) => {
+      window.currentStats = stats;
+      updateStatsDisplay(stats);
+      // Recharge l'historique selon la période sélectionnée
+      const period = document.getElementById('history-period-select').value;
+      renderHistoryTable(stats, period);
+    });
+
+    window.electronAPI.onStatsLoaded((stats) => {
+      if (stats) {
+        window.currentStats = stats; // Pour garder les stats accessibles
+        updateStatsDisplay(stats);
+        // Affichage initial de l'historique (par défaut quotidien)
+        renderHistoryTable(stats, 'daily');
+      }
+    });
+
+    // Fonction pour générer dynamiquement le tableau d'historique
+    function renderHistoryTable(stats, period) {
+      const tableHeader = document.getElementById('history-table-header');
+      const tableBody = document.getElementById('history-table-body');
+      tableHeader.innerHTML = '';
+      tableBody.innerHTML = '';
+
+      // Définir les colonnes selon la période
+      let columns = [];
+      if (period === 'daily') {
+        columns = ['Date', 'Messages', 'Tokens', 'Moyenne caractères'];
+      } else if (period === 'weekly') {
+        columns = ['Début semaine', 'Fin semaine', 'Messages', 'Tokens', 'Moyenne caractères'];
+      } else if (period === 'monthly') {
+        columns = ['Mois', 'Messages', 'Tokens', 'Moyenne caractères'];
+      }
+
+      // Générer l'en-tête
+      columns.forEach(col => {
+        const th = document.createElement('th');
+        th.textContent = col;
+        tableHeader.appendChild(th);
+      });
+
+      // Récupérer les données
+      const data = stats.history[period];
+
+      // Pour le calcul de la moyenne globale sur la période sélectionnée
+      let totalMessages = 0;
+      let totalTokens = 0;
+      let totalAvgChars = 0;
+
+      data.forEach(entry => {
+        const tr = document.createElement('tr');
+        if (period === 'daily') {
+          tr.innerHTML = `
+            <td>${entry.date}</td>
+            <td>${entry.messages}</td>
+            <td>${entry.tokens}</td>
+            <td>${Math.round(entry.avgCharactersPerMessage)}</td>
+          `;
+        } else if (period === 'weekly') {
+          tr.innerHTML = `
+            <td>${entry.weekStart}</td>
+            <td>${entry.weekEnd}</td>
+            <td>${entry.messages}</td>
+            <td>${entry.tokens}</td>
+            <td>${Math.round(entry.avgCharactersPerMessage)}</td>
+          `;
+        } else if (period === 'monthly') {
+          tr.innerHTML = `
+            <td>${entry.month}</td>
+            <td>${entry.messages}</td>
+            <td>${entry.tokens}</td>
+            <td>${Math.round(entry.avgCharactersPerMessage)}</td>
+          `;
+        }
+        tableBody.appendChild(tr);
+
+        // Pour la moyenne globale
+        totalMessages += entry.messages;
+        totalTokens += entry.tokens;
+        totalAvgChars += entry.avgCharactersPerMessage;
+      });
+
+      // Afficher la moyenne globale en bas du tableau
+      if (data.length > 0) {
+        const avgMessages = Math.round(totalMessages / data.length);
+        const avgTokens = Math.round(totalTokens / data.length);
+        const avgChars = Math.round(totalAvgChars / data.length);
+
+        const tr = document.createElement('tr');
+        tr.style.fontWeight = 'bold';
+        if (period === 'daily') {
+          tr.innerHTML = `
+            <td>Moyenne</td>
+            <td>${avgMessages}</td>
+            <td>${avgTokens}</td>
+            <td>${avgChars}</td>
+          `;
+        } else if (period === 'weekly') {
+          tr.innerHTML = `
+            <td colspan="2">Moyenne</td>
+            <td>${avgMessages}</td>
+            <td>${avgTokens}</td>
+            <td>${avgChars}</td>
+          `;
+        } else if (period === 'monthly') {
+          tr.innerHTML = `
+            <td>Moyenne</td>
+            <td>${avgMessages}</td>
+            <td>${avgTokens}</td>
+            <td>${avgChars}</td>
+          `;
+        }
+        tableBody.appendChild(tr);
+      }
+    }
+
+    // ... après avoir chargé les stats ...
+    document.getElementById('history-period-select').addEventListener('change', function() {
+      const period = this.value;
+      // On suppose que tu as déjà les stats chargées dans une variable globale, sinon il faut les recharger
+      renderHistoryTable(window.currentStats, period);
+    });

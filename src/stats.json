@@ -1,0 +1,139 @@
+{
+  "current": {
+    "totals": {
+      "messages": 1,
+      "tokens": 51,
+      "avgCharactersPerMessage": 203
+    },
+    "byDay": {
+      "monday": 0,
+      "tuesday": 0,
+      "wednesday": 0,
+      "thursday": 0,
+      "friday": 0,
+      "saturday": 0,
+      "sunday": 0,
+      "lundi": null
+    },
+    "byPeriod": {
+      "today": 1,
+      "week": 1,
+      "month": 1,
+      "year": 1
+    }
+  },
+  "history": {
+    "daily": [
+      {
+        "date": "2024-03-20",
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 0,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0
+        }
+      },
+      {
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 203,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0,
+          "lundi": null
+        },
+        "date": "2025-06-09"
+      }
+    ],
+    "weekly": [
+      {
+        "weekStart": "2024-03-18",
+        "weekEnd": "2024-03-24",
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 0,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0
+        }
+      },
+      {
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 203,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0,
+          "lundi": null
+        },
+        "weekStart": "2025-06-08",
+        "weekEnd": "2025-06-14"
+      }
+    ],
+    "monthly": [
+      {
+        "month": "2024-03",
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 0,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0
+        }
+      },
+      {
+        "messages": 0,
+        "tokens": 0,
+        "avgCharactersPerMessage": 203,
+        "byDay": {
+          "monday": 0,
+          "tuesday": 0,
+          "wednesday": 0,
+          "thursday": 0,
+          "friday": 0,
+          "saturday": 0,
+          "sunday": 0,
+          "lundi": null
+        },
+        "month": "2025-06"
+      }
+    ]
+  },
+  "lastReset": {
+    "daily": null,
+    "weekly": null,
+    "monthly": null,
+    "yearly": null,
+    "today": "2025-06-09T13:59:11.532Z",
+    "week": "2025-06-09T13:59:11.532Z",
+    "month": "2025-06-09T13:59:11.532Z",
+    "year": "2025-06-09T13:59:11.532Z"
+  },
+  "lastMessageDate": "2025-06-09T13:59:11.498Z"
+}

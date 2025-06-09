@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "content": "Oui, j'ai besoin que tu me réexpliques le problème, je ne l'ai pas compris. Là, j'ai fini de parler, et de temps en temps, ce qui se passe, c'est que quand je fais le raccourci, j'ai l'ancien message qui se met dans ClickRelay, et non pas le message actuel. C'est comme s'il ne venait pas dans la fenêtre ChatGPT, qui ne faisait pas le contrôle A, contrôle X de départ. Est-ce que tu peux me réexpliquer pourquoi, et me proposer une correction ? Je viens de finir le truc, donc ce n'est pas normal.",
+    "timestamp": 1749470839645
+  },
+  {
+    "content": "Ok, mais j'étais bien focus sur le champ que je voulais, donc c'est là où je ne comprends pas. Vas-y, intègre ta correction dans le code actuel, s'il te plaît. Attention, je te fais une intégration de correction, tu ne modifies pas tout le code. Merci d'avance.",
+    "timestamp": 1749470945653
+  },
+  {
+    "content": "Ce que je veux maintenant, c'est que tu rajoutes, alors une fois que tu as écrit dans ChatGPT, je veux que tu ailles focus sur l'application tracker de messages ChatGPT. Et une fois que tu es dedans, tu écris le même message. Tu colles le même message à l'endroit où on met les messages. Merci.",
+    "timestamp": 1749471106261
+  },
+  {
+    "content": "Maintenant, petit ajout, quand tu as fini d'écrire dans le ChatGPT, tu fais ENTRER, ensuite tu vas dans le tracker de messages, tu écris le message, et pareil tu rajoutes ENTRER à la fin pour que ça prenne en compte les messages que je t'envoie. Et bien vas-y, on teste ça. Vas-y, fais-moi le code, et puis après je teste ça. Merci.",
+    "timestamp": 1749471255877
+  },
+  {
+    "content": "Ok, c'est parti. Bah coute, si t'as cette phrase l, c'est que a a fonctionn et que tout a fonctionn. Donc nickel, on va voir si le test a fonctionn. Parce que si tu la reois, c'est que a a fait tout le script.",
+    "timestamp": 1749471432889
+  },
+  {
+    "content": "Ok, maintenant il semblerait que l'application tourne. Ce que je veux faire, c'est comme, de toute faon il y aura une priode de test, parce que l en fait il n'y a plus besoin de m'occuper des statistiques ct tracker et tout, c'est qu'une fois que tu as cliqu sur entre, je vais m'occuper directement dans l'application de grer cette entre, et de grer tout a depuis l'application, puisque c'est le but de l'application. Donc une fois que tu as cliqu sur entre l-bas, c'est bon. Donc ce que j'aimerais en fait, c'est qu'on fasse un, entre guillemets, un excutable qui lance le... Oh punaise. Qui me lance ClipRelay au dbut, ds le dbut, ds que j'allume l'ordinateur. Comme a ClipRelay est tout le temps ouvert, l comme a au moins je suis sr, et puis la console s'ouvrira, et puis dans un premier temps on se contentera de a, juste pour faire des tests, on laisse les logs tels qu'ils sont, enfin voil. Je vais faire quelques tests, peut-tre toute la journe, et puis d'ici soir j'enlverai les logs, j'enlverai tout a au fur et  mesure. Et voil, comme a si jamais j'ai besoin de rajouter des fonctionnalits a sera simple. Je veux juste un truc pour tre sr que a dmarre  chaque fois, et puis pour moi qu'en faisant un double clic j'ouvre le ClipRelay si jamais il est ferm, si jamais moi je l'ai ferm parce que je l'ai dcid. Voil, merci Laurence.",
+    "timestamp": 1749472411489
+  },
+  {
+    "content": "Est-ce que tu peux me dire pourquoi aujourd'hui c'est la pentecôte, si mes souvenirs sont bons, et pourquoi c'est un jour férié auquel on doit travailler ? Est-ce que tu peux m'expliquer tout ça ? Merci.",
+    "timestamp": 1749477551498
+  }
+]
