@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron/main')
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
 
 const statsFilePath = path.join(__dirname, 'stats.json');
 
@@ -173,6 +174,8 @@ function updateStats(message) {
   return stats;
 }
 
+let mainWindow; // Déclare mainWindow en haut du fichier
+
 function createWindow () {
   const displays = screen.getAllDisplays();
   // Prend l'écran 2 si dispo, sinon l'écran 1
@@ -199,7 +202,7 @@ function createWindow () {
     }
   }
 
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     icon: path.join(__dirname, 'icone_app_tracker.png'),
     x,
     y,
@@ -285,3 +288,18 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+// --- Serveur HTTP ---
+const api = express();
+api.use(express.json());
+
+api.post('/set-message', (req, res) => {
+  const message = req.body.message;
+  // Envoie le message à la fenêtre Angular via IPC
+  mainWindow.webContents.send('set-message', message);
+  res.send({ status: 'ok' });
+});
+
+api.listen(3001, () => {
+  console.log('API Electron sur http://localhost:3001');
+});

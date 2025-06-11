@@ -1,9 +1,9 @@
 {
   "current": {
     "totals": {
-      "messages": 1,
-      "tokens": 51,
-      "avgCharactersPerMessage": 203
+      "messages": 145,
+      "tokens": 17542,
+      "avgCharactersPerMessage": 105
     },
     "byDay": {
       "monday": 0,
@@ -13,14 +13,23 @@
       "friday": 0,
       "saturday": 0,
       "sunday": 0,
-      "lundi": null
+      "lundi": 36,
+      "mardi": 58,
+      "mercredi": 46,
+      "jeudi": 1
     },
     "byPeriod": {
-      "today": 1,
-      "week": 1,
-      "month": 1,
-      "year": 1
+      "today": 145,
+      "week": 145,
+      "month": 145,
+      "year": 145
     }
+  },
+  "averages": {
+    "perDay": 16,
+    "perWeek": 16,
+    "perMonth": 16,
+    "perYear": 16
   },
   "history": {
     "daily": [
@@ -135,5 +144,5 @@
     "month": "2025-06-09T13:59:11.532Z",
     "year": "2025-06-09T13:59:11.532Z"
   },
-  "lastMessageDate": "2025-06-09T13:59:11.498Z"
+  "lastMessageDate": "2025-06-11T22:23:37.169Z"
 }

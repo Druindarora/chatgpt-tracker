@@ -1,5 +1,5 @@
 const messages = [];
-    const input = document.getElementById('messageInput');
+    const input = document.getElementById('data-cliprelay-tracker-input');
     const logButton = document.getElementById('logButton');
     const counter = document.getElementById('counter');
     const timer = document.getElementById('timer');
@@ -197,24 +197,24 @@ const messages = [];
     // Fonction pour mettre à jour l'affichage des stats
     function updateStatsDisplay(stats) {
       // Totaux
-      document.getElementById('total-messages').textContent = stats.totals.messages;
-      document.getElementById('total-tokens').textContent = stats.totals.tokens;
-      document.getElementById('avg-chars').textContent = Math.round(stats.totals.avgCharactersPerMessage);
+      document.getElementById('total-messages').textContent = stats.current.totals.messages;
+      document.getElementById('total-tokens').textContent = stats.current.totals.tokens;
+      document.getElementById('avg-chars').textContent = Math.round(stats.current.totals.avgCharactersPerMessage);
       
       // Par jour
-      document.getElementById('monday-count').textContent = stats.byDay.monday;
-      document.getElementById('tuesday-count').textContent = stats.byDay.tuesday;
-      document.getElementById('wednesday-count').textContent = stats.byDay.wednesday;
-      document.getElementById('thursday-count').textContent = stats.byDay.thursday;
-      document.getElementById('friday-count').textContent = stats.byDay.friday;
-      document.getElementById('saturday-count').textContent = stats.byDay.saturday;
-      document.getElementById('sunday-count').textContent = stats.byDay.sunday;
+      document.getElementById('monday-count').textContent = stats.current.byDay.lundi;
+      document.getElementById('tuesday-count').textContent = stats.current.byDay.mardi;
+      document.getElementById('wednesday-count').textContent = stats.current.byDay.mercredi;
+      document.getElementById('thursday-count').textContent = stats.current.byDay.jeudi;
+      document.getElementById('friday-count').textContent = stats.current.byDay.vendredi;
+      document.getElementById('saturday-count').textContent = stats.current.byDay.samedi;
+      document.getElementById('sunday-count').textContent = stats.current.byDay.dimanche;
       
       // Par période
-      document.getElementById('today-count').textContent = stats.byPeriod.today;
-      document.getElementById('week-count').textContent = stats.byPeriod.week;
-      document.getElementById('month-count').textContent = stats.byPeriod.month;
-      document.getElementById('year-count').textContent = stats.byPeriod.year;
+      document.getElementById('today-count').textContent = stats.current.byPeriod.today;
+      document.getElementById('week-count').textContent = stats.current.byPeriod.week;
+      document.getElementById('month-count').textContent = stats.current.byPeriod.month;
+      document.getElementById('year-count').textContent = stats.current.byPeriod.year;
       
       // Moyennes
       document.getElementById('avg-day').textContent = Math.round(stats.averages.perDay);
@@ -346,3 +346,11 @@ const messages = [];
       // On suppose que tu as déjà les stats chargées dans une variable globale, sinon il faut les recharger
       renderHistoryTable(window.currentStats, period);
     });
+  
+window.electronAPI.onSetMessage((message) => {
+  const input = document.getElementById('data-cliprelay-tracker-input');
+  if (input) {
+    input.value = message;
+    input.focus();
+  }
+});
