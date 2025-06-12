@@ -83,7 +83,8 @@ function createWindow () {
     messages.push(message);
     fs.writeFileSync(filePath, JSON.stringify(messages, null, 2), 'utf8');
     
-    const stats = updateStats(message);
+    // Correction : passer le chemin du fichier stats et l'objet utilitaire à updateStats
+    const stats = updateStats(message, statsFilePath, require('./statsUtils'));
     // Recalcule le compteur today à partir des messages du jour
     stats.current.byPeriod.today = recalculateTodayCount();
     stats.current.byPeriod.week = recalculateWeekCount();
