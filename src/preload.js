@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onStatsUpdated: (callback) => ipcRenderer.on('stats-updated', (_, stats) => callback(stats)),
   onStatsLoaded: (callback) => ipcRenderer.on('stats-loaded', (_, stats) => callback(stats)),
   getStats: () => ipcRenderer.send('get-stats'),
-  onSetMessage: (callback) => ipcRenderer.on('set-message', (event, message) => callback(message))
+  onSetMessage: (callback) => ipcRenderer.on('set-message', (event, message) => callback(message)),
+  resetStats: () => ipcRenderer.send('reset-stats')
 });

@@ -1,100 +1,63 @@
 {
   "current": {
     "totals": {
-      "messages": 149,
-      "tokens": 17962,
-      "avgCharactersPerMessage": 332
+      "messages": 1,
+      "tokens": 124,
+      "avgCharactersPerMessage": 494
     },
     "byDay": {
-      "monday": 0,
-      "tuesday": 0,
-      "wednesday": 0,
-      "thursday": 0,
-      "friday": 0,
-      "saturday": 0,
-      "sunday": 0,
-      "lundi": 36,
-      "mardi": 58,
-      "mercredi": 46,
-      "jeudi": 5
+      "lundi": 0,
+      "mardi": 0,
+      "mercredi": 0,
+      "jeudi": 1,
+      "vendredi": 0,
+      "samedi": 0,
+      "dimanche": 0
     },
     "byPeriod": {
-      "today": 149,
-      "week": 149,
-      "month": 149,
-      "year": 149
+      "today": 1,
+      "week": 1,
+      "month": 1,
+      "year": 1
     }
   },
   "averages": {
-    "perDay": 16,
-    "perWeek": 16,
-    "perMonth": 16,
-    "perYear": 16
+    "perDay": 0,
+    "perWeek": 0,
+    "perMonth": 0,
+    "perYear": 0
   },
   "history": {
     "daily": [
       {
-        "date": "2024-03-20",
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 0,
+        "messages": 1,
+        "tokens": 4,
+        "avgCharactersPerMessage": 494,
         "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0
-        }
-      },
-      {
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 203,
-        "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0,
-          "lundi": null
+          "lundi": 0,
+          "mardi": 0,
+          "mercredi": 0,
+          "jeudi": 1,
+          "vendredi": 0,
+          "samedi": 0,
+          "dimanche": 0
         },
-        "date": "2025-06-09"
+        "date": "2025-06-12"
       }
     ],
     "weekly": [
       {
-        "weekStart": "2024-03-18",
-        "weekEnd": "2024-03-24",
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 0,
+        "messages": 1,
+        "tokens": 4,
+        "avgCharactersPerMessage": 494,
         "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0
-        }
-      },
-      {
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 203,
-        "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0,
-          "lundi": null
+          "lundi": 0,
+          "mardi": 0,
+          "mercredi": 0,
+          "jeudi": 1,
+          "vendredi": 0,
+          "samedi": 0,
+          "dimanche": 0
         },
         "weekStart": "2025-06-08",
         "weekEnd": "2025-06-14"
@@ -102,33 +65,17 @@
     ],
     "monthly": [
       {
-        "month": "2024-03",
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 0,
+        "messages": 1,
+        "tokens": 4,
+        "avgCharactersPerMessage": 494,
         "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0
-        }
-      },
-      {
-        "messages": 0,
-        "tokens": 0,
-        "avgCharactersPerMessage": 203,
-        "byDay": {
-          "monday": 0,
-          "tuesday": 0,
-          "wednesday": 0,
-          "thursday": 0,
-          "friday": 0,
-          "saturday": 0,
-          "sunday": 0,
-          "lundi": null
+          "lundi": 0,
+          "mardi": 0,
+          "mercredi": 0,
+          "jeudi": 1,
+          "vendredi": 0,
+          "samedi": 0,
+          "dimanche": 0
         },
         "month": "2025-06"
       }
@@ -139,10 +86,10 @@
     "weekly": null,
     "monthly": null,
     "yearly": null,
-    "today": "2025-06-09T13:59:11.532Z",
-    "week": "2025-06-09T13:59:11.532Z",
-    "month": "2025-06-09T13:59:11.532Z",
-    "year": "2025-06-09T13:59:11.532Z"
+    "today": "2025-06-12T20:25:32.005Z",
+    "week": "2025-06-12T20:25:32.005Z",
+    "month": "2025-06-12T20:25:32.005Z",
+    "year": "2025-06-12T20:25:32.005Z"
   },
-  "lastMessageDate": "2025-06-12T17:26:04.886Z"
+  "lastMessageDate": "2025-06-12T20:25:31.980Z"
 }

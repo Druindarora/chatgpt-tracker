@@ -3,22 +3,34 @@ import { updateStatsDisplay, renderHistoryTable } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('data-cliprelay-tracker-input');
-  const logButton = document.getElementById('log-button');
-  const copyLastButton = document.getElementById('copy-last-button');
+  const logButton = document.getElementById('logButton'); // Correction ici
+  const copyLastButton = document.getElementById('copyLastButton'); // Correction ici
 
   logButton.addEventListener('click', () => {
+      console.log('[LOG] Clic sur le bouton ENREGISTRER');
       const content = input.value.trim();
-      if (!content) return;
+      console.log('[LOG] Valeur de l\'input :', content);
+      if (!content) {
+        console.log('[LOG] Aucun contenu, on ne fait rien.');
+        return;
+      }
       logMessage(content);
+      console.log('[LOG] logMessage appelé depuis le clic');
       input.value = '';
   });
 
   document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && document.activeElement === input) {
         e.preventDefault();
+        console.log('[LOG] Touche Entrée pressée dans l\'input');
         const content = input.value.trim();
-        if (!content) return;
+        console.log('[LOG] Valeur de l\'input :', content);
+        if (!content) {
+          console.log('[LOG] Aucun contenu, on ne fait rien.');
+          return;
+        }
         logMessage(content);
+        console.log('[LOG] logMessage appelé depuis Entrée');
         input.value = '';
       }
   });

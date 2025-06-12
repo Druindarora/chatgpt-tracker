@@ -14,3 +14,12 @@ setInterval(() => {
     updateTimerDisplay();
     updateAllMessageTimers();
 }, 1000);
+
+// Gestion du bouton de réinitialisation des stats
+const resetStatsBtn = document.getElementById('reset-stats-btn');
+if (resetStatsBtn) {
+    resetStatsBtn.addEventListener('click', () => {
+        // Envoie un message IPC pour demander la réinitialisation des stats
+        window.electronAPI.resetStats();
+    });
+}

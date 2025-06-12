@@ -42,7 +42,10 @@
       <div class="stats-content">
         <!-- Partie État Actuel -->
         <div class="box has-background-dark">
-          <h2 class="title is-4 has-text-white">État Actuel</h2>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 class="title is-4 has-text-white" style="margin-bottom: 0;">État Actuel</h2>
+            <button id="reset-stats-btn" class="button is-small is-danger" style="margin-left: 10px;">Réinitialiser</button>
+          </div>
           
           <!-- Totaux -->
           <div class="box has-background-dark">
@@ -172,5 +175,6 @@
     </div>
 
     <script type="module" src="./renderer.js"></script>
+    <script type="module" src="./events.js"></script>
   </body>
 </html>

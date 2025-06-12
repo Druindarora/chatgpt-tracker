@@ -201,30 +201,45 @@ export function renderHistoryTable(stats, period) {
 // Fonction pour mettre à jour l'affichage des stats
 export function updateStatsDisplay(stats) {
     // Totaux
-    document.getElementById('total-messages').textContent = stats?.current?.totals?.messages ?? 0;
-    document.getElementById('total-tokens').textContent = stats?.current?.totals?.tokens ?? 0;
-    document.getElementById('avg-chars').textContent = Math.round(stats?.current?.totals?.avgCharactersPerMessage ?? 0);
-    
+    const totalMessagesElem = document.getElementById('total-messages');
+    if (totalMessagesElem) totalMessagesElem.textContent = stats?.current?.totals?.messages ?? 0;
+    const totalTokensElem = document.getElementById('total-tokens');
+    if (totalTokensElem) totalTokensElem.textContent = stats?.current?.totals?.tokens ?? 0;
+    const avgCharsElem = document.getElementById('avg-chars');
+    if (avgCharsElem) avgCharsElem.textContent = Math.round(stats?.current?.totals?.avgCharactersPerMessage ?? 0);
     // Par jour
-    document.getElementById('monday-count').textContent = stats?.current?.byDay?.lundi ?? 0;
-    document.getElementById('tuesday-count').textContent = stats?.current?.byDay?.mardi ?? 0;
-    document.getElementById('wednesday-count').textContent = stats?.current?.byDay?.mercredi ?? 0;
-    document.getElementById('thursday-count').textContent = stats?.current?.byDay?.jeudi ?? 0;
-    document.getElementById('friday-count').textContent = stats?.current?.byDay?.vendredi ?? 0;
-    document.getElementById('saturday-count').textContent = stats?.current?.byDay?.samedi ?? 0;
-    document.getElementById('sunday-count').textContent = stats?.current?.byDay?.dimanche ?? 0;
-    
+    const mondayElem = document.getElementById('monday-count');
+    if (mondayElem) mondayElem.textContent = stats?.current?.byDay?.lundi ?? 0;
+    const tuesdayElem = document.getElementById('tuesday-count');
+    if (tuesdayElem) tuesdayElem.textContent = stats?.current?.byDay?.mardi ?? 0;
+    const wednesdayElem = document.getElementById('wednesday-count');
+    if (wednesdayElem) wednesdayElem.textContent = stats?.current?.byDay?.mercredi ?? 0;
+    const thursdayElem = document.getElementById('thursday-count');
+    if (thursdayElem) thursdayElem.textContent = stats?.current?.byDay?.jeudi ?? 0;
+    const fridayElem = document.getElementById('friday-count');
+    if (fridayElem) fridayElem.textContent = stats?.current?.byDay?.vendredi ?? 0;
+    const saturdayElem = document.getElementById('saturday-count');
+    if (saturdayElem) saturdayElem.textContent = stats?.current?.byDay?.samedi ?? 0;
+    const sundayElem = document.getElementById('sunday-count');
+    if (sundayElem) sundayElem.textContent = stats?.current?.byDay?.dimanche ?? 0;
     // Par période
-    document.getElementById('today-count').textContent = stats?.current?.byPeriod?.today ?? 0;
-    document.getElementById('week-count').textContent = stats?.current?.byPeriod?.week ?? 0;
-    document.getElementById('month-count').textContent = stats?.current?.byPeriod?.month ?? 0;
-    document.getElementById('year-count').textContent = stats?.current?.byPeriod?.year ?? 0;
-    
+    const todayElem = document.getElementById('today-count');
+    if (todayElem) todayElem.textContent = stats?.current?.byPeriod?.today ?? 0;
+    const weekElem = document.getElementById('week-count');
+    if (weekElem) weekElem.textContent = stats?.current?.byPeriod?.week ?? 0;
+    const monthElem = document.getElementById('month-count');
+    if (monthElem) monthElem.textContent = stats?.current?.byPeriod?.month ?? 0;
+    const yearElem = document.getElementById('year-count');
+    if (yearElem) yearElem.textContent = stats?.current?.byPeriod?.year ?? 0;
     // Moyennes
-    document.getElementById('avg-day').textContent = Math.round(stats?.averages?.perDay ?? 0);
-    document.getElementById('avg-week').textContent = Math.round(stats?.averages?.perWeek ?? 0);
-    document.getElementById('avg-month').textContent = Math.round(stats?.averages?.perMonth ?? 0);
-    document.getElementById('avg-year').textContent = Math.round(stats?.averages?.perYear ?? 0);
+    const avgDayElem = document.getElementById('avg-day');
+    if (avgDayElem) avgDayElem.textContent = Math.round(stats?.averages?.perDay ?? 0);
+    const avgWeekElem = document.getElementById('avg-week');
+    if (avgWeekElem) avgWeekElem.textContent = Math.round(stats?.averages?.perWeek ?? 0);
+    const avgMonthElem = document.getElementById('avg-month');
+    if (avgMonthElem) avgMonthElem.textContent = Math.round(stats?.averages?.perMonth ?? 0);
+    const avgYearElem = document.getElementById('avg-year');
+    if (avgYearElem) avgYearElem.textContent = Math.round(stats?.averages?.perYear ?? 0);
 }
 
 // Gestion des onglets

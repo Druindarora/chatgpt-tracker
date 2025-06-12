@@ -2,6 +2,17 @@ const { app, BrowserWindow, ipcMain, screen } = require('electron/main')
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+// --- Fonctions utilitaires de stats déplacées dans statsUtils.js ---
+const {
+  isNewPeriod,
+  getWeekNumber,
+  saveToHistory,
+  resetCounters,
+  recalculateTodayCount,
+  recalculateWeekCount,
+  recalculateMonthCount,
+  recalculateYearCount
+} = require('./statsUtils');
 
 const statsFilePath = path.join(__dirname, 'stats.json');
 
@@ -42,95 +53,6 @@ function initializeStatsFile() {
     };
     fs.writeFileSync(statsFilePath, JSON.stringify(initialStats, null, 2), 'utf8');
   }
-}
-
-// Fonction pour vérifier si une date est le début d'une nouvelle période
-function isNewPeriod(lastMessageDate, currentMessageDate, period) {
-  if (!lastMessageDate) return true;
-
-  switch(period) {
-    case 'daily':
-      return lastMessageDate.getDate() !== currentMessageDate.getDate() || 
-             lastMessageDate.getMonth() !== currentMessageDate.getMonth() || 
-             lastMessageDate.getFullYear() !== currentMessageDate.getFullYear();
-    
-    case 'weekly':
-      // On compare les numéros de semaine
-      const lastWeek = getWeekNumber(lastMessageDate);
-      const currentWeek = getWeekNumber(currentMessageDate);
-      return lastWeek !== currentWeek || 
-             lastMessageDate.getFullYear() !== currentMessageDate.getFullYear();
-    
-    case 'monthly':
-      return lastMessageDate.getMonth() !== currentMessageDate.getMonth() || 
-             lastMessageDate.getFullYear() !== currentMessageDate.getFullYear();
-    
-    case 'yearly':
-      return lastMessageDate.getFullYear() !== currentMessageDate.getFullYear();
-    
-    default:
-      return false;
-  }
-}
-
-// Fonction pour obtenir le numéro de semaine
-function getWeekNumber(date) {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-}
-
-// Fonction pour sauvegarder les stats dans l'historique
-function saveToHistory(stats, period) {
-  const now = new Date();
-  const historyEntry = {
-    messages: stats.current.byPeriod[period],
-    tokens: Math.ceil(stats.current.byPeriod[period] * 4),
-    avgCharactersPerMessage: stats.current.totals.avgCharactersPerMessage,
-    byDay: { ...stats.current.byDay }
-  };
-
-  switch(period) {
-    case 'today':
-      historyEntry.date = now.toISOString().split('T')[0];
-      stats.history.daily.push(historyEntry);
-      // Garder l'historique complet
-      break;
-    case 'week':
-      const weekStart = new Date(now);
-      weekStart.setDate(now.getDate() - now.getDay());
-      historyEntry.weekStart = weekStart.toISOString().split('T')[0];
-      historyEntry.weekEnd = new Date(weekStart.setDate(weekStart.getDate() + 6)).toISOString().split('T')[0];
-      stats.history.weekly.push(historyEntry);
-      // Garder l'historique complet
-      break;
-    case 'month':
-      historyEntry.month = now.toISOString().slice(0, 7);
-      stats.history.monthly.push(historyEntry);
-      // Garder l'historique complet
-      break;
-  }
-}
-
-// Fonction pour réinitialiser les compteurs
-function resetCounters(stats, period) {
-  switch(period) {
-    case 'today':
-      stats.current.byPeriod.today = 0;
-      break;
-    case 'week':
-      stats.current.byPeriod.week = 0;
-      break;
-    case 'month':
-      stats.current.byPeriod.month = 0;
-      break;
-    case 'year':
-      stats.current.byPeriod.year = 0;
-      break;
-  }
-  stats.lastReset[period] = new Date().toISOString();
 }
 
 // Fonction principale de mise à jour des stats
@@ -233,6 +155,12 @@ function createWindow () {
     fs.writeFileSync(filePath, JSON.stringify(messages, null, 2), 'utf8');
     
     const stats = updateStats(message);
+    // Recalcule le compteur today à partir des messages du jour
+    stats.current.byPeriod.today = recalculateTodayCount();
+    stats.current.byPeriod.week = recalculateWeekCount();
+    stats.current.byPeriod.month = recalculateMonthCount();
+    stats.current.byPeriod.year = recalculateYearCount();
+    fs.writeFileSync(statsFilePath, JSON.stringify(stats, null, 2), 'utf8');
     event.sender.send('stats-updated', stats);
   });
 
@@ -249,17 +177,54 @@ function createWindow () {
     // Filtre les messages pour supprimer celui avec le timestamp donné
     messages = messages.filter(msg => msg.timestamp !== timestamp);
     fs.writeFileSync(filePath, JSON.stringify(messages, null, 2), 'utf8');
+    // Après suppression, recalculer le compteur today
+    if (fs.existsSync(statsFilePath)) {
+      const stats = JSON.parse(fs.readFileSync(statsFilePath, 'utf8'));
+      stats.current.byPeriod.today = recalculateTodayCount();
+      stats.current.byPeriod.week = recalculateWeekCount();
+      stats.current.byPeriod.month = recalculateMonthCount();
+      stats.current.byPeriod.year = recalculateYearCount();
+      fs.writeFileSync(statsFilePath, JSON.stringify(stats, null, 2), 'utf8');
+      event.sender.send('stats-updated', stats);
+    }
   });
 
   ipcMain.on('get-stats', (event) => {
     if (fs.existsSync(statsFilePath)) {
       try {
         const stats = JSON.parse(fs.readFileSync(statsFilePath, 'utf8'));
+        stats.current.byPeriod.today = recalculateTodayCount();
+        stats.current.byPeriod.week = recalculateWeekCount();
+        stats.current.byPeriod.month = recalculateMonthCount();
+        stats.current.byPeriod.year = recalculateYearCount();
+        fs.writeFileSync(statsFilePath, JSON.stringify(stats, null, 2), 'utf8');
         event.sender.send('stats-loaded', stats);
       } catch (e) {
         event.sender.send('stats-loaded', null);
       }
     }
+  });
+
+  ipcMain.on('reset-stats', (event) => {
+    // Réinitialise le fichier stats.json à zéro
+    const emptyStats = {
+      current: {
+        totals: { messages: 0, tokens: 0, avgCharactersPerMessage: 0 },
+        byDay: {
+          lundi: 0, mardi: 0, mercredi: 0, jeudi: 0, vendredi: 0, samedi: 0, dimanche: 0
+        },
+        byPeriod: { today: 0, week: 0, month: 0, year: 0 }
+      },
+      averages: { perDay: 0, perWeek: 0, perMonth: 0, perYear: 0 },
+      history: { daily: [], weekly: [], monthly: [] },
+      lastReset: {
+        daily: null, weekly: null, monthly: null, yearly: null,
+        today: new Date().toISOString(), week: new Date().toISOString(), month: new Date().toISOString(), year: new Date().toISOString()
+      },
+      lastMessageDate: null
+    };
+    fs.writeFileSync(statsFilePath, JSON.stringify(emptyStats, null, 2), 'utf8');
+    event.sender.send('stats-updated', emptyStats);
   });
 
   let recentMessages = [];
