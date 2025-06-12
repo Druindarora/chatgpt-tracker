@@ -146,6 +146,77 @@ function recalculateYearCount() {
   return messages.filter(msg => msg.timestamp >= startOfYear && msg.timestamp <= endOfYear).length;
 }
 
+function initializeStatsFile(statsFilePath) {
+  if (!fs.existsSync(statsFilePath)) {
+    const initialStats = {
+      totals: {
+        messages: 0,
+        tokens: 0,
+        characters: 0,
+        avgCharactersPerMessage: 0
+      },
+      byDay: {
+        monday: 0,
+        tuesday: 0,
+        wednesday: 0,
+        thursday: 0,
+        friday: 0,
+        saturday: 0,
+        sunday: 0
+      },
+      byPeriod: {
+        today: 0,
+        week: 0,
+        month: 0,
+        year: 0
+      },
+      averages: {
+        perDay: 0,
+        perWeek: 0,
+        perMonth: 0,
+        perYear: 0
+      },
+      lastResetDate: null,
+      lastWeekReset: null,
+      lastMonthReset: null,
+      lastYearReset: null
+    };
+    fs.writeFileSync(statsFilePath, JSON.stringify(initialStats, null, 2), 'utf8');
+  }
+}
+
+function updateStats(message, statsFilePath, statsUtils) {
+  let stats = JSON.parse(fs.readFileSync(statsFilePath, 'utf8'));
+  const messageDate = new Date(message.timestamp);
+  // Mise à jour des totaux
+  stats.current.totals.messages++;
+  const tokens = Math.ceil(message.content.length / 4);
+  stats.current.totals.tokens += tokens;
+  stats.current.totals.avgCharactersPerMessage = message.content.length;
+  // Mise à jour par jour de la semaine
+  const dayOfWeek = messageDate.toLocaleDateString('fr-FR', { weekday: 'long' }).toLowerCase();
+  stats.current.byDay[dayOfWeek]++;
+  // Vérification et sauvegarde des périodes
+  const periods = ['today', 'week', 'month', 'year'];
+  periods.forEach(period => {
+    const lastMessageDate = stats.lastMessageDate ? new Date(stats.lastMessageDate) : null;
+    if (statsUtils.isNewPeriod(lastMessageDate, messageDate, period)) {
+      statsUtils.saveToHistory(stats, period);
+      statsUtils.resetCounters(stats, period);
+    }
+  });
+  // Mise à jour des compteurs de période
+  stats.current.byPeriod.today++;
+  stats.current.byPeriod.week++;
+  stats.current.byPeriod.month++;
+  stats.current.byPeriod.year++;
+  // Sauvegarde de la date du dernier message
+  stats.lastMessageDate = messageDate.toISOString();
+  // Sauvegarde des stats
+  fs.writeFileSync(statsFilePath, JSON.stringify(stats, null, 2), 'utf8');
+  return stats;
+}
+
 module.exports = {
   isNewPeriod,
   getWeekNumber,
@@ -154,5 +225,7 @@ module.exports = {
   recalculateTodayCount,
   recalculateWeekCount,
   recalculateMonthCount,
-  recalculateYearCount
+  recalculateYearCount,
+  initializeStatsFile,
+  updateStats
 };
