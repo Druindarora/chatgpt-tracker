@@ -1,9 +1,9 @@
 {
   "current": {
     "totals": {
-      "messages": 145,
-      "tokens": 17542,
-      "avgCharactersPerMessage": 105
+      "messages": 149,
+      "tokens": 17962,
+      "avgCharactersPerMessage": 332
     },
     "byDay": {
       "monday": 0,
@@ -16,13 +16,13 @@
       "lundi": 36,
       "mardi": 58,
       "mercredi": 46,
-      "jeudi": 1
+      "jeudi": 5
     },
     "byPeriod": {
-      "today": 145,
-      "week": 145,
-      "month": 145,
-      "year": 145
+      "today": 149,
+      "week": 149,
+      "month": 149,
+      "year": 149
     }
   },
   "averages": {
@@ -144,5 +144,5 @@
     "month": "2025-06-09T13:59:11.532Z",
     "year": "2025-06-09T13:59:11.532Z"
   },
-  "lastMessageDate": "2025-06-11T22:23:37.169Z"
+  "lastMessageDate": "2025-06-12T17:26:04.886Z"
 }
