@@ -3,6 +3,9 @@ const path = require('path');
 
 // --- Fonctions utilitaires de stats ---
 
+/**
+ * Détermine si une nouvelle période (jour, semaine, mois, année) a commencé en comparant deux dates.
+ */
 function isNewPeriod(lastMessageDate, currentMessageDate, period) {
   if (!lastMessageDate) return true;
   switch(period) {
@@ -25,14 +28,30 @@ function isNewPeriod(lastMessageDate, currentMessageDate, period) {
   }
 }
 
+/**
+ * Calcule le numéro de la semaine de l’année pour une date donnée (semaine commence le dimanche).
+ */
 function getWeekNumber(date) {
+  // Semaine commence le dimanche
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const dayNum = d.getUTCDay(); // 0 = dimanche
+  // Trouver le dimanche précédent ou courant
+  d.setUTCDate(d.getUTCDate() - dayNum);
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  const yearStartDay = yearStart.getUTCDay();
+  // Premier dimanche de l'année
+  const firstSunday = new Date(yearStart);
+  if (yearStartDay !== 0) {
+    firstSunday.setUTCDate(yearStart.getUTCDate() + (7 - yearStartDay));
+  }
+  // Calcul du numéro de semaine
+  return Math.floor((d - firstSunday) / 604800000) + 1;
 }
 
+/**
+ * Sauvegarde les statistiques courantes dans l’historique pour la période donnée (jour, semaine, mois).
+ * Pour la semaine, la période va du dimanche au samedi.
+ */
 function saveToHistory(stats, period) {
   const now = new Date();
   const historyEntry = {
@@ -47,10 +66,13 @@ function saveToHistory(stats, period) {
       stats.history.daily.push(historyEntry);
       break;
     case 'week':
+      // Semaine du dimanche au samedi
       const weekStart = new Date(now);
-      weekStart.setDate(now.getDate() - now.getDay());
+      weekStart.setDate(now.getDate() - now.getDay()); // dimanche
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6); // samedi
       historyEntry.weekStart = weekStart.toISOString().split('T')[0];
-      historyEntry.weekEnd = new Date(weekStart.setDate(weekStart.getDate() + 6)).toISOString().split('T')[0];
+      historyEntry.weekEnd = weekEnd.toISOString().split('T')[0];
       stats.history.weekly.push(historyEntry);
       break;
     case 'month':
@@ -60,6 +82,9 @@ function saveToHistory(stats, period) {
   }
 }
 
+/**
+ * Réinitialise les compteurs de messages pour la période spécifiée (jour, semaine, mois, année).
+ */
 function resetCounters(stats, period) {
   switch(period) {
     case 'today':
@@ -78,6 +103,9 @@ function resetCounters(stats, period) {
   stats.lastReset[period] = new Date().toISOString();
 }
 
+/**
+ * Recompte le nombre de messages du jour courant à partir du fichier messages.json.
+ */
 function recalculateTodayCount() {
   const filePath = path.join(__dirname, 'messages.json');
   let messages = [];
@@ -94,6 +122,9 @@ function recalculateTodayCount() {
   return messages.filter(msg => msg.timestamp >= startOfDay && msg.timestamp <= endOfDay).length;
 }
 
+/**
+ * Recompte le nombre de messages de la semaine courante (du dimanche au samedi) à partir de messages.json.
+ */
 function recalculateWeekCount() {
   const filePath = path.join(__dirname, 'messages.json');
   let messages = [];
@@ -105,15 +136,17 @@ function recalculateWeekCount() {
     }
   }
   const now = new Date();
-  const day = now.getDay();
-  const diffToMonday = (day === 0 ? -6 : 1) - day;
-  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday, 0, 0, 0, 0);
-  const sunday = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6, 23, 59, 59, 999);
-  const mondayTime = monday.getTime();
+  const day = now.getDay(); // 0 = dimanche
+  const sunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - day, 0, 0, 0, 0);
+  const saturday = new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() + 6, 23, 59, 59, 999);
   const sundayTime = sunday.getTime();
-  return messages.filter(msg => msg.timestamp >= mondayTime && msg.timestamp <= sundayTime).length;
+  const saturdayTime = saturday.getTime();
+  return messages.filter(msg => msg.timestamp >= sundayTime && msg.timestamp <= saturdayTime).length;
 }
 
+/**
+ * Recompte le nombre de messages du mois courant à partir de messages.json.
+ */
 function recalculateMonthCount() {
   const filePath = path.join(__dirname, 'messages.json');
   let messages = [];
@@ -130,6 +163,9 @@ function recalculateMonthCount() {
   return messages.filter(msg => msg.timestamp >= startOfMonth && msg.timestamp <= endOfMonth).length;
 }
 
+/**
+ * Recompte le nombre de messages de l’année courante à partir de messages.json.
+ */
 function recalculateYearCount() {
   const filePath = path.join(__dirname, 'messages.json');
   let messages = [];
@@ -146,6 +182,9 @@ function recalculateYearCount() {
   return messages.filter(msg => msg.timestamp >= startOfYear && msg.timestamp <= endOfYear).length;
 }
 
+/**
+ * Initialise le fichier de statistiques avec des valeurs par défaut si le fichier n’existe pas.
+ */
 function initializeStatsFile(statsFilePath) {
   if (!fs.existsSync(statsFilePath)) {
     const initialStats = {
@@ -185,6 +224,14 @@ function initializeStatsFile(statsFilePath) {
   }
 }
 
+/**
+ * Met à jour les statistiques avec un nouveau message :
+ * - Incrémente les totaux
+ * - Met à jour les stats par jour de la semaine
+ * - Vérifie si une nouvelle période commence et sauvegarde l’historique
+ * - Met à jour les compteurs de période
+ * - Sauvegarde la date du dernier message
+ */
 function updateStats(message, statsFilePath, statsUtils) {
   let stats = JSON.parse(fs.readFileSync(statsFilePath, 'utf8'));
   const messageDate = new Date(message.timestamp);
